@@ -4,6 +4,8 @@ use strict;
 use warnings;
 use Errno;
 
+my $opt_print_fn = @ARGV && $ARGV[0] eq '-f' && shift @ARGV;
+
 my $fn = shift @ARGV || do {
     # create dir
     my $datadir = $ENV{VIP_HOME} || "$ENV{HOME}/vip";
@@ -40,8 +42,12 @@ while (wait == -1) {}
 
 # print file, if exists
 if (-e $fn) {
-    open my $fh, '<', $fn
-        or die "failed to open file:$fn:$!";
-    print join '', <$fh>;
-    close $fh;
+    if ($opt_print_fn) {
+	print "$fn\n";
+    } else {
+	open my $fh, '<', $fn
+	    or die "failed to open file:$fn:$!";
+	print join '', <$fh>;
+	close $fh;
+    }
 }
