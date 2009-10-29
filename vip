@@ -34,7 +34,7 @@ unless (my $pid = fork) {
     # child process
     open STDOUT, '>&', STDERR
         or die "failed to reopen stderr:$!";
-    system('vi', $fn) == 0
+    system($ENV{EDITOR} || 'vi', $fn) == 0
         or die "vi exited with non-zero return code:$?";
     exit 0;
 }
